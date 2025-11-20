@@ -51,8 +51,8 @@ Must be set to a symbol.  Acceptable values are:
 - `right-fringe': align to right-fringe
 - `right-margin': align to right-margin"
     :type '(choice (const right-margin)
-                   (const right-fringe)
-                   (const window))
+            (const right-fringe)
+            (const window))
     :group 'mode-line))
 
 
@@ -119,8 +119,8 @@ Only respected in GUI."
 If `window-width' is smaller than the limit, some information won't be
 displayed. It can be an integer or a float number. nil means no limit."
   :type '(choice integer
-                 float
-                 (const :tag "Disable" nil))
+          float
+          (const :tag "Disable" nil))
   :group 'doom-modeline)
 
 (defcustom doom-modeline-spc-face-overrides nil
@@ -143,10 +143,10 @@ e.g. `projectile' doesn't handle symlink folders well, while `project' is
 unable to handle sub-projects.
 Specify another one if you encounter the issue."
   :type '(choice (const :tag "Auto-detect" auto)
-                 (const :tag "Find File in Project" ffip)
-                 (const :tag "Projectile" projectile)
-                 (const :tag "Built-in Project" project)
-                 (const :tag "Disable" nil))
+          (const :tag "Find File in Project" ffip)
+          (const :tag "Projectile" projectile)
+          (const :tag "Built-in Project" project)
+          (const :tag "Disable" nil))
   :group 'doom-modeline)
 
 (defcustom doom-modeline-buffer-file-name-style 'auto
@@ -167,18 +167,18 @@ Given ~/Projects/FOSS/emacs/lisp/comint.el
   file-name-with-project => FOSS|comint.el
   buffer-name => comint.el<2> (uniquify buffer name)"
   :type '(choice (const auto)
-                 (const truncate-upto-project)
-                 (const truncate-from-project)
-                 (const truncate-with-project)
-                 (const truncate-except-project)
-                 (const truncate-upto-root)
-                 (const truncate-all)
-                 (const truncate-nil)
-                 (const relative-from-project)
-                 (const relative-to-project)
-                 (const file-name)
-                 (const file-name-with-project)
-                 (const buffer-name))
+          (const truncate-upto-project)
+          (const truncate-from-project)
+          (const truncate-with-project)
+          (const truncate-except-project)
+          (const truncate-upto-root)
+          (const truncate-all)
+          (const truncate-nil)
+          (const relative-from-project)
+          (const relative-to-project)
+          (const file-name)
+          (const file-name-with-project)
+          (const buffer-name))
   :group'doom-modeline)
 
 (defcustom doom-modeline-buffer-file-true-name nil
@@ -295,13 +295,13 @@ See `mode-line-percent-position'."
   :type '(radio
           (const :tag "nil:  No offset is displayed" nil)
           (const :tag "\"%o\": Proportion of \"travel\" of the window through the buffer"
-            (-3 "%o"))
+                 (-3 "%o"))
           (const :tag "\"%p\": Percentage offset of top of window"
-            (-3 "%p"))
+                 (-3 "%p"))
           (const :tag "\"%P\": Percentage offset of bottom of window"
-            (-3 "%P"))
+                 (-3 "%P"))
           (const :tag "\"%q\": Offsets of both top and bottom of window"
-            (6 "%q")))
+                 (6 "%q")))
   :group 'doom-modeline)
 
 (defcustom doom-modeline-position-line-format '("L%l")
@@ -343,8 +343,8 @@ It respects `doom-modeline-enable-word-count'."
 (defcustom doom-modeline-buffer-encoding t
   "Whether display the buffer encoding."
   :type '(choice (const :tag "Always" t)
-                 (const :tag "When non-default" nondefault)
-                 (const :tag "Never" nil))
+          (const :tag "When non-default" nondefault)
+          (const :tag "Never" nil))
   :group 'doom-modeline)
 
 (defcustom doom-modeline-default-coding-system 'utf-8
@@ -355,8 +355,8 @@ It respects `doom-modeline-enable-word-count'."
 (defcustom doom-modeline-default-eol-type 0
   "Default EOL type for `doom-modeline-buffer-encoding' `nondefault'."
   :type '(choice (const :tag "Unix-style LF" 0)
-                 (const :tag "DOS-style CRLF" 1)
-                 (const :tag "Mac-style CR" 2))
+          (const :tag "DOS-style CRLF" 1)
+          (const :tag "Mac-style CR" 2))
   :group 'doom-modeline)
 
 (defcustom doom-modeline-indent-info nil
@@ -685,12 +685,12 @@ The function must accept `buffer-name' and return `shortened-name'."
   :type '(radio (function-item :tag "Shorten"
                                :format "%t: %v\n %h"
                                doom-modeline-shorten-irc)
-                (function-item
-                 :tag "Leave unchanged"
-                 :format "%t: %v\n"
-                 identity)
-                (function
-                 :tag "Other function"))
+          (function-item
+           :tag "Leave unchanged"
+           :format "%t: %v\n"
+           identity)
+          (function
+           :tag "Other function"))
   :group 'doom-modeline)
 
 (defcustom doom-modeline-battery t
@@ -976,6 +976,11 @@ Also see the face `doom-modeline-unread-number'."
 (defface doom-modeline-meow-keypad-state
   '((t (:inherit doom-modeline-evil-operator-state)))
   "Face for the keypad state in meow-edit indicator."
+  :group 'doom-modeline-faces)
+
+(defface doom-modeline-meow-lispy-state
+  '((t (:inherit doom-modeline-evil-replace-state)))
+  "Face for the lispy state in meow-edit indicator."
   :group 'doom-modeline-faces)
 
 (defface doom-modeline-project-name
@@ -1324,9 +1329,9 @@ Example:
                  ;; Backport from `mode-line-right-align-edge' in 30
                  (if (and (display-graphic-p)
                           (not (eq mode-line-right-align-edge 'window)))
-		             `(space :align-to (- ,mode-line-right-align-edge
+		     `(space :align-to (- ,mode-line-right-align-edge
                                           (,rhs-width)))
-		           `(space :align-to (,(- (window-pixel-width)
+		   `(space :align-to (,(- (window-pixel-width)
                                           (window-scroll-bar-width)
                                           (window-right-divider-width)
                                           (* (or (car (window-margins)) 1)
@@ -1470,8 +1475,8 @@ See https://github.com/seagle0128/doom-modeline/issues/301."
           (when (listp props)
             (cl-destructuring-bind (&key family height inherit &allow-other-keys) props
               (propertize icon 'face `(:inherit (doom-modeline ,(or face inherit props))
-                                                :family  ,(or family "")
-                                                :height  ,(or height 1.0))))))
+                                       :family  ,(or family "")
+                                       :height  ,(or height 1.0))))))
       (propertize icon 'face `(:inherit (doom-modeline ,face))))))
 
 (defun doom-modeline-icon (icon-set icon-name unicode text &rest args)

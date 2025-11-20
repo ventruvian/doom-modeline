@@ -210,6 +210,7 @@
 (declare-function meow-keypad-mode-p "ext:meow")
 (declare-function meow-motion-mode-p "ext:meow")
 (declare-function meow-normal-mode-p "ext:meow")
+(declare-function meow-lispy-mode-p "ext:lispy-cat")
 (declare-function minions--prominent-modes "ext:minions")
 (declare-function mlscroll-mode-line "ext:mlscroll")
 (declare-function mu4e--modeline-string "ext:mu4e-modeline")
@@ -650,17 +651,17 @@ mouse-3: Toggle minor modes"
       (if (bound-and-true-p minions-mode)
           `((:propertize ("" ,(minions--prominent-modes))
              face ,face
-		     mouse-face ,mouse-face
-		     help-echo ,help-echo
-		     local-map ,mode-line-minor-mode-keymap)
+	     mouse-face ,mouse-face
+	     help-echo ,help-echo
+	     local-map ,mode-line-minor-mode-keymap)
             ,sep
             (:propertize ("" ,(doom-modeline-icon 'octicon "nf-oct-gear" "⚙"
                                                   minions-mode-line-lighter
                                                   :face face))
-             mouse-face ,mouse-face
-             help-echo "Minions
+                         mouse-face ,mouse-face
+                         help-echo "Minions
 mouse-1: Display minor modes menu"
-             local-map ,minions-mode-line-minor-modes-map)
+                         local-map ,minions-mode-line-minor-modes-map)
             ,sep)
         `((:propertize ("" minor-mode-alist)
            face ,face
@@ -854,11 +855,11 @@ level."
                         'mouse-face 'doom-modeline-highlight
                         'local-map (let ((map (make-sparse-keymap)))
                                      (define-key map [mode-line down-mouse-1]
-                                       flycheck-mode-menu-map)
+                                                 flycheck-mode-menu-map)
                                      (define-key map [mode-line mouse-2]
-                                       (lambda ()
-                                         (interactive)
-                                         (describe-function 'flycheck-mode)))
+                                                 (lambda ()
+                                                   (interactive)
+                                                   (describe-function 'flycheck-mode)))
                                      map))))))
 (add-hook 'flycheck-status-changed-functions #'doom-modeline-update-flycheck)
 (add-hook 'flycheck-mode-hook #'doom-modeline-update-flycheck)
@@ -987,11 +988,11 @@ level."
                'mouse-face 'doom-modeline-highlight
                'local-map (let ((map (make-sparse-keymap)))
                             (define-key map [mode-line down-mouse-1]
-                              flymake-menu)
+                                        flymake-menu)
                             (define-key map [mode-line mouse-2]
-                              (lambda ()
-                                (interactive)
-                                (describe-function 'flymake-mode)))
+                                        (lambda ()
+                                          (interactive)
+                                          (describe-function 'flymake-mode)))
                             map)))))))
 (advice-add #'flymake--handle-report :after #'doom-modeline-update-flymake)
 
@@ -1096,9 +1097,9 @@ block selection."
                                   (eq evil-state 'visual)))
              (doom-modeline--active))
     (cl-destructuring-bind (beg . end)
-      (if (and (bound-and-true-p evil-local-mode) (eq evil-state 'visual))
-          (cons evil-visual-beginning evil-visual-end)
-        (cons (region-beginning) (region-end)))
+        (if (and (bound-and-true-p evil-local-mode) (eq evil-state 'visual))
+            (cons evil-visual-beginning evil-visual-end)
+          (cons (region-beginning) (region-end)))
       (propertize
        (let ((lines (count-lines beg (min end (point-max)))))
          (concat
@@ -1284,15 +1285,15 @@ The number of matches contains substitutions and highlightings."
 (defsubst doom-modeline--multiple-cursors ()
   "Show the number of multiple cursors."
   (cl-destructuring-bind (count . face)
-    (cond ((bound-and-true-p multiple-cursors-mode)
-           (cons (mc/num-cursors)
-                 (doom-modeline-face 'doom-modeline-panel)))
-          ((bound-and-true-p evil-mc-cursor-list)
-           (cons (length evil-mc-cursor-list)
-                 (doom-modeline-face (if evil-mc-frozen
-                                         'doom-modeline-bar
-                                       'doom-modeline-panel))))
-          ((cons nil nil)))
+      (cond ((bound-and-true-p multiple-cursors-mode)
+             (cons (mc/num-cursors)
+                   (doom-modeline-face 'doom-modeline-panel)))
+            ((bound-and-true-p evil-mc-cursor-list)
+             (cons (length evil-mc-cursor-list)
+                   (doom-modeline-face (if evil-mc-frozen
+                                           'doom-modeline-bar
+                                         'doom-modeline-panel))))
+            ((cons nil nil)))
     (when count
       (concat (propertize " " 'face face)
               (if (doom-modeline-icon-displayable-p)
@@ -1370,8 +1371,8 @@ regions, 5. The current/total for the highlight term (with `symbol-overlay'),
   ;; TODO: Include other information
   (cond ((eq major-mode 'image-mode)
          (cl-destructuring-bind (width . height)
-           (when (fboundp 'image-size)
-             (image-size (image-get-display-property) :pixels))
+             (when (fboundp 'image-size)
+               (image-size (image-get-display-property) :pixels))
            (format "  %dx%d  " width height)))))
 
 
@@ -1639,7 +1640,7 @@ one. The ignored buffers are excluded unless `aw-ignore-on' is nil."
          (fboundp 'project-current))
     (let ((map (make-sparse-keymap)))
       (define-key map [mode-line down-mouse-1]
-        (bound-and-true-p menu-bar-project-item))
+                  (bound-and-true-p menu-bar-project-item))
       map))))
 
 (defvar-local doom-modeline--project-name nil)
@@ -1741,11 +1742,11 @@ mouse-2: Show help for minor mode"
                                   'mouse-face 'doom-modeline-highlight
                                   'local-map (let ((map (make-sparse-keymap)))
                                                (define-key map [mode-line mouse-1]
-                                                 #'persp-switch)
+                                                           #'persp-switch)
                                                (define-key map [mode-line mouse-2]
-                                                 (lambda ()
-                                                   (interactive)
-                                                   (describe-function 'persp-mode)))
+                                                           (lambda ()
+                                                             (interactive)
+                                                             (describe-function 'persp-mode)))
                                                map))
                       " "))))))
 
@@ -1833,10 +1834,10 @@ mouse-1: Display Line and Column Mode Menu")
       ;; Percent position
       (doom-modeline-percent-position
        ((:propertize ("" doom-modeline-percent-position)
-         face ,face
-         help-echo ,help-echo
-         mouse-face ,mouse-face
-         local-map ,local-map)
+                     face ,face
+                     help-echo ,help-echo
+                     mouse-face ,mouse-face
+                     local-map ,local-map)
         ,sep)))))
 
 ;;
@@ -1954,6 +1955,9 @@ TEXT is alternative if icon is not available."
   "The current Meow state. Requires `meow-mode' to be enabled."
   (when (bound-and-true-p meow-mode)
     (let-alist (cond
+                ((meow-lispy-mode-p)  '((face    . doom-modeline-meow-lispy-state)
+                                        (icon    . "nf-md-alpha_l_circle")
+                                        (unicode . "🅛")))
                 ((meow-normal-mode-p) '((face    . doom-modeline-meow-normal-state)
                                         (icon    . "nf-md-alpha_n_circle")
                                         (unicode . "🅝")))
@@ -2120,9 +2124,9 @@ mouse-3: Describe current input method")
                       'local-map (let ((map (make-sparse-keymap)))
                                    (if connected
                                        (define-key map [mode-line mouse-2]
-                                         #'cider-quit)
+                                                   #'cider-quit)
                                      (define-key map [mode-line mouse-1]
-                                       #'cider-jack-in))
+                                                 #'cider-jack-in))
                                    map)))))
 
 (add-hook 'cider-connected-hook #'doom-modeline-update-cider)
@@ -2177,18 +2181,18 @@ mouse-1: Reload to start server")
                                    (if workspaces
                                        (progn
                                          (define-key map [mode-line C-mouse-1]
-                                           #'lsp-workspace-folders-open)
+                                                     #'lsp-workspace-folders-open)
                                          (define-key map [mode-line mouse-1]
-                                           #'lsp-describe-session)
+                                                     #'lsp-describe-session)
                                          (define-key map [mode-line mouse-2]
-                                           #'lsp-workspace-shutdown)
+                                                     #'lsp-workspace-shutdown)
                                          (define-key map [mode-line mouse-3]
-                                           #'lsp-workspace-restart))
+                                                     #'lsp-workspace-restart))
                                      (progn
                                        (define-key map [mode-line mouse-1]
-                                         (lambda ()
-                                           (interactive)
-                                           (ignore-errors (revert-buffer t t))))))
+                                                   (lambda ()
+                                                     (interactive)
+                                                     (ignore-errors (revert-buffer t t))))))
                                    map)))))
 (add-hook 'lsp-before-initialize-hook #'doom-modeline-update-lsp)
 (add-hook 'lsp-after-initialize-hook #'doom-modeline-update-lsp)
@@ -2341,7 +2345,7 @@ It requires `async' and `ghub' packages."
           (with-timeout (10)
             (ignore-errors
               (when-let* ((host (alist-get 'github ghub-default-host-alist))
-			              (username (ghub--username host))
+			  (username (ghub--username host))
                           (token (or (ghub--token host username 'forge t)
                                      (ghub--token host username 'ghub t))))
                 (ghub-get "/notifications"
@@ -2402,17 +2406,17 @@ mouse-3: Fetch notifications"
         'mouse-face 'doom-modeline-highlight
         'local-map (let ((map (make-sparse-keymap)))
                      (define-key map [mode-line mouse-1]
-                       (lambda ()
-                         "Open GitHub notifications page."
-                         (interactive)
-                         (run-with-idle-timer 300 nil #'doom-modeline--github-fetch-notifications)
-                         (browse-url "https://github.com/notifications")))
+                                 (lambda ()
+                                   "Open GitHub notifications page."
+                                   (interactive)
+                                   (run-with-idle-timer 300 nil #'doom-modeline--github-fetch-notifications)
+                                   (browse-url "https://github.com/notifications")))
                      (define-key map [mode-line mouse-3]
-                       (lambda ()
-                         "Fetching GitHub notifications."
-                         (interactive)
-                         (message "Fetching GitHub notifications...")
-                         (doom-modeline--github-fetch-notifications)))
+                                 (lambda ()
+                                   "Fetching GitHub notifications."
+                                   (interactive)
+                                   (message "Fetching GitHub notifications...")
+                                   (doom-modeline--github-fetch-notifications)))
                      map))
        sep))))
 
@@ -2492,11 +2496,11 @@ mouse-3: Stop debugging"
                 'mouse-face 'doom-modeline-highlight
                 'local-map (let ((map (make-sparse-keymap)))
                              (define-key map [mode-line mouse-1]
-                               #'edebug-help)
+                                         #'edebug-help)
                              (define-key map [mode-line mouse-2]
-                               #'edebug-next-mode)
+                                         #'edebug-next-mode)
                              (define-key map [mode-line mouse-3]
-                               #'edebug-stop)
+                                         #'edebug-stop)
                              map))))
 
 (defsubst doom-modeline--debug-on-error ()
@@ -2590,9 +2594,9 @@ mouse-1: Toggle Debug on Quit"
                     (doom-modeline-unread-number doom-modeline-notification))))
           'mouse-face 'doom-modeline-highlight
           'keymap `(mode-line keymap
-                              (mouse-1 . ,open-fun)
-                              (mouse-2 . ,open-fun)
-                              (mouse-3 . ,open-fun))
+                    (mouse-1 . ,open-fun)
+                    (mouse-2 . ,open-fun)
+                    (mouse-3 . ,open-fun))
           'help-echo (concat (if (= unread-count 1)
                                  "You have an unread email"
                                (format "You have %s unread emails" unread-count))
@@ -2735,7 +2739,7 @@ read the individual functions documentation for more."
            (car (tracking-shorten (list name))))
       (and (boundp 'erc-track-shorten-function)
            (functionp erc-track-shorten-function)
-	       (car (funcall erc-track-shorten-function (list name))))
+	   (car (funcall erc-track-shorten-function (list name))))
       (and (fboundp 'rcirc-short-buffer-name)
            (rcirc-short-buffer-name name))
       name))
@@ -2839,19 +2843,19 @@ mouse-3: Switch to next unread buffer")))
                                   (cond
                                    ((doom-modeline--circe-p)
                                     (define-key map [mode-line mouse-1]
-                                      #'tracking-previous-buffer)
+                                                #'tracking-previous-buffer)
                                     (define-key map [mode-line mouse-3]
-                                      #'tracking-next-buffer))
+                                                #'tracking-next-buffer))
                                    ((doom-modeline--erc-p)
                                     (define-key map [mode-line mouse-1]
-                                      #'erc-switch-to-buffer)
+                                                #'erc-switch-to-buffer)
                                     (define-key map [mode-line mouse-3]
-                                      #'erc-track-switch-buffer))
+                                                #'erc-track-switch-buffer))
                                    ((doom-modeline--rcirc-p)
                                     (define-key map [mode-line mouse-1]
-                                      #'rcirc-switch-to-server-buffer)
+                                                #'rcirc-switch-to-server-buffer)
                                     (define-key map [mode-line mouse-3]
-                                      #'rcirc-next-active-buffer)))
+                                                #'rcirc-next-active-buffer)))
                                   map))
 
          ;; Display the unread irc buffers as well
@@ -2865,11 +2869,11 @@ mouse-3: Switch to next unread buffer")))
   (if (and doom-modeline-irc
            (bound-and-true-p doom-modeline-mode))
       (setq global-mode-string
-		    (delq 'rcirc-activity-string global-mode-string))
+	    (delq 'rcirc-activity-string global-mode-string))
     (when (and rcirc-track-minor-mode
                (not (memq 'rcirc-activity-string global-mode-string)))
-	  (setq global-mode-string
-		    (append global-mode-string '(rcirc-activity-string))))))
+      (setq global-mode-string
+	    (append global-mode-string '(rcirc-activity-string))))))
 (add-hook 'rcirc-track-minor-mode-hook #'doom-modeline-override-rcirc)
 (add-hook 'doom-modeline-mode-hook #'doom-modeline-override-rcirc)
 
@@ -3013,14 +3017,14 @@ Uses `nerd-icons-mdicon' to fetch the icon."
       (progn
         (advice-add #'battery-update :override #'doom-modeline-update-battery-status)
         (setq global-mode-string
-		      (delq 'battery-mode-line-string global-mode-string))
+	      (delq 'battery-mode-line-string global-mode-string))
         (and (bound-and-true-p display-battery-mode) (battery-update)))
     (progn
       (advice-remove #'battery-update #'doom-modeline-update-battery-status)
       (when (and display-battery-mode battery-status-function battery-mode-line-format
                  (not (memq 'battery-mode-line-string global-mode-string)))
         (setq global-mode-string
-		      (append global-mode-string '(battery-mode-line-string)))))))
+	      (append global-mode-string '(battery-mode-line-string)))))))
 (add-hook 'display-battery-mode-hook #'doom-modeline-override-battery)
 (add-hook 'doom-modeline-mode-hook #'doom-modeline-override-battery)
 
@@ -3177,11 +3181,11 @@ mouse-3: Restart preview"
           'mouse-face 'doom-modeline-highlight
           'local-map (let ((map (make-sparse-keymap)))
                        (define-key map [mode-line mouse-1]
-                         #'grip-browse-preview)
+                                   #'grip-browse-preview)
                        (define-key map [mode-line mouse-2]
-                         #'grip-stop-preview)
+                                   #'grip-stop-preview)
                        (define-key map [mode-line mouse-3]
-                         #'grip-restart-preview)
+                                   #'grip-restart-preview)
                        map)))
        sep))))
 
@@ -3313,8 +3317,8 @@ When the svg library is not available, return nil."
            (bound-and-true-p doom-modeline-mode))
       (setq global-mode-string (delq 'display-time-string global-mode-string))
     (or (memq 'display-time-string global-mode-string)
-	    (setq global-mode-string
-		      (append global-mode-string '(display-time-string))))))
+	(setq global-mode-string
+	      (append global-mode-string '(display-time-string))))))
 (add-hook 'display-time-mode-hook #'doom-modeline-override-time)
 (add-hook 'doom-modeline-mode-hook #'doom-modeline-override-time)
 
@@ -3333,7 +3337,7 @@ When the svg library is not available, return nil."
   (and (bound-and-true-p compilation-in-progress)
        (propertize "[Compiling] "
                    'face (doom-modeline-face 'doom-modeline-compilation)
-	               'help-echo "Compiling; mouse-2: Goto Buffer"
+	           'help-echo "Compiling; mouse-2: Goto Buffer"
                    'mouse-face 'doom-modeline-highlight
                    'local-map
                    (make-mode-line-mouse-map
@@ -3347,7 +3351,7 @@ When the svg library is not available, return nil."
 (doom-modeline-def-segment eldoc
   (and (bound-and-true-p eldoc-mode)
        '(eldoc-mode-line-string
-		 (" " eldoc-mode-line-string " "))))
+	 (" " eldoc-mode-line-string " "))))
 
 (defun doom-modeline-eldoc-minibuffer-message (format-string &rest args)
   "Display message specified by FORMAT-STRING and ARGS on the mode-line as needed.
@@ -3356,16 +3360,16 @@ with FORMAT-STRING on the mode line when the current buffer is a minibuffer.
 Otherwise, it displays the message like `message' would."
   (if (minibufferp)
       (progn
-	    (add-hook 'minibuffer-exit-hook
-		          (lambda () (setq eldoc-mode-line-string nil
-			                  ;; https://debbugs.gnu.org/16920
-			                  eldoc-last-message nil))
-		          nil t)
-	    (with-current-buffer
-	        (window-buffer
-	         (or (window-in-direction 'above (minibuffer-window))
+	(add-hook 'minibuffer-exit-hook
+		  (lambda () (setq eldoc-mode-line-string nil
+			           ;; https://debbugs.gnu.org/16920
+			           eldoc-last-message nil))
+		  nil t)
+	(with-current-buffer
+	    (window-buffer
+	     (or (window-in-direction 'above (minibuffer-window))
                  (minibuffer-selected-window)
-		         (get-largest-window)))
+		 (get-largest-window)))
           (setq eldoc-mode-line-string
                 (when (stringp format-string)
                   (apply #'format-message format-string args)))
