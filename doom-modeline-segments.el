@@ -86,6 +86,7 @@
 (defvar iedit-occurrences-overlays)
 (defvar kele-menu-map)
 (defvar meow--indicator)
+(defvar meow--current-state)
 (defvar minions-mode-line-lighter)
 (defvar minions-mode-line-minor-modes-map)
 (defvar mlscroll-right-align)
@@ -204,7 +205,6 @@
 (declare-function lsp-workspaces "ext:lsp-mode")
 (declare-function lv-message "ext:lv")
 (declare-function mc/num-cursors "ext:multiple-cursors-core")
-(declare-function meow--current-state "ext:meow")
 (declare-function minions--prominent-modes "ext:minions")
 (declare-function mlscroll-mode-line "ext:mlscroll")
 (declare-function mu4e--modeline-string "ext:mu4e-modeline")
@@ -1948,7 +1948,7 @@ TEXT is alternative if icon is not available."
 (defsubst doom-modeline--meow ()
   "The current Meow state. Requires `meow-mode' to be enabled."
   (when (bound-and-true-p meow-mode)
-    (let-alist (pcase (bound-and-true-p meow--current-state)
+    (let-alist (pcase meow--current-state
                  ('lispy  '((face    . doom-modeline-meow-lispy-state)
                             (icon    . "nf-md-alpha_l_circle")
                             (unicode . "🅛")))
@@ -1973,7 +1973,7 @@ TEXT is alternative if icon is not available."
       (doom-modeline--modal-icon
        (substring-no-properties meow--indicator)
        .face
-       (symbol-name (meow--current-state))
+       (symbol-name meow--current-state)
        .icon
        .unicode))))
 
