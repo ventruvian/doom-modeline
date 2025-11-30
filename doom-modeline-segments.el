@@ -1087,7 +1087,8 @@ Respects `doom-modeline-enable-word-count'."
 
 Such as how many characters and lines are selected, or the NxM dimensions of a
 block selection."
-  (when (and (or mark-active (and (bound-and-true-p evil-local-mode)
+  (when (and doom-modeline-selection-info
+             (or mark-active (and (bound-and-true-p evil-local-mode)
                                   (eq evil-state 'visual)))
              (doom-modeline--active))
     (cl-destructuring-bind (beg . end)
